@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link, withRouter } from "react-router-dom";
 import {
   Card,
   CardTitle,
@@ -14,18 +14,38 @@ import {
   Col
 } from "reactstrap";
 
+import { withFirebase } from "../components/Firebase";
+import * as ROUTES from "../constants/routes";
+
 const INITIAL_STATE = {
   email: "",
-  pass: ""
+  pass: "",
+  error: null
 };
-
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
   }
 
+  onSubmit = e => {
+    e.preventDefault();
+    const { email, pass } = this.state;
+    this.props.firebase
+      .doSignInWithEmailAndPassword(email, pass)
+      .then(authUser => {
+        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.DASHBOARD);
+      });
+  };
+
+  onChange = e => {
+    console.log(e.target.name + " : " + e.target.value);
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
+    const { email, pass, error } = this.state;
     return (
       <div style={{ display: "flex", height: "100vh", alignItems: "center" }}>
         <Col sm="12" md={{ size: 4, offset: 4 }}>
@@ -44,18 +64,24 @@ class Login extends Component {
                     name="email"
                     id="email"
                     placeholder="example@example.com"
+                    value={email}
+                    onChange={this.onChange}
                   />
                 </FormGroup>
                 <FormGroup style={{ paddingBottom: 15 }}>
                   <Label for="password">Password</Label>
                   <Input
                     type="password"
-                    name="password"
+                    name="pass"
                     id="password"
                     placeholder="password"
+                    value={pass}
+                    onChange={this.onChange}
                   />
                 </FormGroup>
-                <Button color="primary">Continue</Button>
+                <Button onClick={this.onSubmit} color="primary">
+                  Continue
+                </Button>
               </Form>
             </CardBody>
           </Card>
@@ -65,4 +91,5 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const LoginPage = withRouter(withFirebase(Login));
+export default LoginPage;
