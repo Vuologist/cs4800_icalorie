@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Container } from "reactstrap";
+import { Alert } from "reactstrap";
 
 import Header from "../components/Header";
 import ProfileCard from "../components/ProfileCard";
@@ -64,7 +64,7 @@ class Dashboard extends Component {
     return (
       <React.Fragment>
         <Header />
-        <Container fluid={true}>
+        <div style={{ paddingRight: 15, paddingLeft: 15 }}>
           <Alert
             color="success"
             isOpen={alertVisible}
@@ -87,7 +87,7 @@ class Dashboard extends Component {
               </div>
             ))}
           </div>
-        </Container>
+        </div>
       </React.Fragment>
     );
   };
