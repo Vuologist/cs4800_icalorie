@@ -32,9 +32,10 @@ class Login extends Component {
     const { email, pass } = this.state;
     this.props.firebase
       .doSignInWithEmailAndPassword(email, pass)
-      .then(() => {
+      .then(fb => {
+        console.log(fb);
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.DASHBOARD);
+        this.props.history.push(ROUTES.DASHBOARD + fb);
       })
       .catch(error => {
         this.setState({ error });

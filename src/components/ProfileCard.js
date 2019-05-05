@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { Card, Progress, Container } from "reactstrap";
+import { Card, Progress } from "reactstrap";
 
 const ProfileCard = ({ name, progress, notes }) => (
   <Card>
