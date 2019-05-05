@@ -11,35 +11,41 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       alertVisible: true,
-      users: null
+      clientName: [],
+      clientDetails: [],
+      loading: true
     };
     this.firebase = this.props.firebase;
   }
 
   componentDidMount() {
+    // get current login's username
     let username = this.props.location.pathname.split("/", 3)[2];
-    let clients = [];
-    this.unsubscribe = this.firebase
-      .getClients(username)
-      .then(snapshot =>
-        snapshot
-          .data()
-          .clients.forEach(client => clients.push(this.getClientInfo(client)))
-      );
-    console.log("clients", clients);
+    // get nutritionists client list and store in clients
+    this.unsubscribe = this.firebase.getClients(username).onSnapshot(snapshot =>
+      snapshot.data().clients.forEach(client => {
+        this.setState(state => {
+          const clientName = [...state.clientName, client];
+          return { clientName };
+        });
+        this.setClientInfo(client);
+      })
+    );
+    this.setState({ loading: false });
   }
 
-  getClientInfo = client => {
-    let userInfo = {};
-    this.firebase
-      .getClient(client)
-      .then(snapshot => console.log(snapshot.data()));
-    console.log("userInfo", userInfo);
-    return userInfo;
+  setClientInfo = client => {
+    this.unsubscribe1 = this.firebase.getClient(client).onSnapshot(snapshot =>
+      this.setState(state => {
+        const clientDetails = [...state.clientDetails, snapshot.data()];
+        return { clientDetails };
+      })
+    );
   };
 
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscribe1();
   }
 
   alertDismiss = () => {
@@ -52,11 +58,10 @@ class Dashboard extends Component {
     </div>
   );
 
-  renderContent = () => {};
-
-  render() {
-    const { alertVisible } = this.state;
+  renderContent = () => {
     const user = this.props.location.pathname.split("/", 3)[2];
+    const { alertVisible, clientDetails, clientName } = this.state;
+    console.log(clientDetails);
     return (
       <React.Fragment>
         <Header />
@@ -69,14 +74,23 @@ class Dashboard extends Component {
           >
             Welcome {user} , who shall we fix up today?!?! 😈
           </Alert>
-          <ProfileCard
-            name="Anthony"
-            progress={34}
-            notes={["ipsum", "ipsum"]}
-          />
+          {clientDetails.map((user, index) => (
+            <ProfileCard
+              key={"card" + index}
+              name={clientName[index]}
+              progress={clientDetails[index].progress}
+              notes={clientDetails[index].notes}
+            />
+          ))}
         </Container>
       </React.Fragment>
     );
+  };
+
+  render() {
+    const { loading } = this.state;
+
+    return loading ? this.renderIsLoading() : this.renderContent();
   }
 }
 
