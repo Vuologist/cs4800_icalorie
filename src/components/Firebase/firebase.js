@@ -27,14 +27,22 @@ class Firebase {
    * @param {String} name The username of the doctor
    * @returns {Object}
    */
-  getClients = name => this.db.collection("nutritionist/" + name).get();
+  getClients = name =>
+    this.db
+      .collection("nutritionist")
+      .doc(name)
+      .get();
 
   /**
    * Get specific client's data
    * @param {String} name fname of the client
    * @returns {Object} will contain notes and progress
    */
-  getClient = name => this.db.collection("client/" + name).get();
+  getClient = name =>
+    this.db
+      .collection("client")
+      .doc(name)
+      .get();
 }
 
 export default Firebase;

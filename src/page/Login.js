@@ -33,9 +33,9 @@ class Login extends Component {
     this.props.firebase
       .doSignInWithEmailAndPassword(email, pass)
       .then(fb => {
-        console.log(fb);
+        let username = fb.user.email.split("@", 2);
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.DASHBOARD + fb);
+        this.props.history.push(ROUTES.DASHBOARD + username[0]);
       })
       .catch(error => {
         this.setState({ error });
