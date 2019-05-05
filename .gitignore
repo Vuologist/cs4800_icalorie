@@ -25,3 +25,4 @@ yarn-error.log*
 #personal - abvu
 .vscode
 package-lock.json
+/src/components/Firebase/firebaseStuff.json
