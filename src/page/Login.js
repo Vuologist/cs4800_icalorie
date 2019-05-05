@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import { Redirect, Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import {
   Card,
   CardTitle,
   CardBody,
-  Container,
   Button,
   Form,
   Input,
   FormGroup,
   Label,
-  Row,
-  Col
+  Col,
+  Alert
 } from "reactstrap";
 
 import { withFirebase } from "../components/Firebase";
@@ -33,14 +32,16 @@ class Login extends Component {
     const { email, pass } = this.state;
     this.props.firebase
       .doSignInWithEmailAndPassword(email, pass)
-      .then(authUser => {
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.DASHBOARD);
+      })
+      .catch(error => {
+        this.setState({ error });
       });
   };
 
   onChange = e => {
-    console.log(e.target.name + " : " + e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -56,6 +57,7 @@ class Login extends Component {
               >
                 iCalorie Login
               </CardTitle>
+              {error && <Alert color="danger">Invalid Info</Alert>}
               <Form>
                 <FormGroup style={{ paddingBottom: 15 }}>
                   <Label for="email">Email</Label>
