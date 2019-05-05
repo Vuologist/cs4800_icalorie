@@ -61,7 +61,6 @@ class Dashboard extends Component {
   renderContent = () => {
     const user = this.props.location.pathname.split("/", 3)[2];
     const { alertVisible, clientDetails, clientName } = this.state;
-    console.log(clientDetails);
     return (
       <React.Fragment>
         <Header />
@@ -72,16 +71,22 @@ class Dashboard extends Component {
             toggle={this.alertDismiss}
             style={{ marginTop: 10, marginBottom: 10 }}
           >
-            Welcome {user} , who shall we fix up today?!?! 😈
+            Welcome {user}, who shall we fix up today?!?! 😈
           </Alert>
-          {clientDetails.map((user, index) => (
-            <ProfileCard
-              key={"card" + index}
-              name={clientName[index]}
-              progress={clientDetails[index].progress}
-              notes={clientDetails[index].notes}
-            />
-          ))}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {clientDetails.map((user, index) => (
+              <div
+                style={{ width: "25%", display: "inline-block", margin: 20 }}
+              >
+                <ProfileCard
+                  key={"card" + index}
+                  name={clientName[index]}
+                  progress={clientDetails[index].progress}
+                  notes={clientDetails[index].notes}
+                />
+              </div>
+            ))}
+          </div>
         </Container>
       </React.Fragment>
     );

@@ -19,7 +19,7 @@ const ProfileCard = ({ name, progress, notes }) => (
       <FontAwesomeIcon icon={faUserCircle} size="6x" />
       <h2 style={{ fontWeight: "bold" }}>{name}</h2>
       <hr style={{ width: "100%" }} />
-      <Progress style={{ width: "95%" }} value={progress} />
+      <Progress style={{ width: "75%" }} value={progress} />
       <hr style={{ width: "100%" }} />
       <h3>Notes</h3>
       <ul>
